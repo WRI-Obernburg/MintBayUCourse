@@ -1,8 +1,11 @@
 const puppeteer = require('puppeteer');
+const fs = require('fs');
 
 (async () => {
-    // Launch the browser
-    const browser = await puppeteer.launch();
+    // Launch the browser with --no-sandbox option
+    const browser = await puppeteer.launch({
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
     const page = await browser.newPage();
 
     // Navigate to the MintbayU course page
@@ -33,22 +36,23 @@ const puppeteer = require('puppeteer');
     // Ensure at least 3 courses exist
     if (sortedCourses.length >= 3) {
         const firstMostRecentHandle = await page.$(`.em-event.em-item:nth-of-type(${1})`);
-        //remove the first course from the webpage
+        // Remove the first course from the webpage
         await firstMostRecentHandle.evaluate(el => el.remove());
-        
+
         const secondMostRecentHandle = await page.$(`.em-event.em-item:nth-of-type(${2})`);
         const thirdMostRecentHandle = await page.$(`.em-event.em-item:nth-of-type(${3})`);
-        
+
         const secondBox = await secondMostRecentHandle.boundingBox();
         const thirdBox = await thirdMostRecentHandle.boundingBox();
 
         if (secondBox && thirdBox) {
-            const x = Math.min(secondBox.x, thirdBox.x)-20;
-            const y = Math.min(secondBox.y, thirdBox.y) - Math.min(secondBox.height, thirdBox.height)/2-5;
+            const x = Math.min(secondBox.x, thirdBox.x) - 20;
+            const y = Math.min(secondBox.y, thirdBox.y) - Math.min(secondBox.height, thirdBox.height) / 2 - 5;
             const width = Math.max(secondBox.x + secondBox.width, thirdBox.x + thirdBox.width) - x + 20;
-            const height = Math.max(secondBox.height,thirdBox.height) + 45;
+            const height = Math.max(secondBox.height, thirdBox.height) + 45;
 
-            await page.screenshot({ path: `image.png`, clip: { x, y, width, height } });
+            // Save the screenshot as image.png
+            await page.screenshot({ path: 'image.png', clip: { x, y, width, height } });
         }
     }
 
