@@ -1,0 +1,42 @@
+name: Puppeteer Screenshot Capture
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Runs every hour at the top of the hour
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout the repository
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Step 2: Set up Node.js environment
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'  # Use Node.js version 16 or your preferred version
+
+    # Step 3: Install dependencies
+    - name: Install dependencies
+      run: |
+        npm install puppeteer
+
+    # Step 4: Run the Puppeteer script
+    - name: Run Puppeteer script
+      run: node screenshot.js
+
+    # Step 5: Commit and push the image to the repository
+    - name: Commit and push image
+      run: |
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'actions@github.com'
+        git add image.png
+        git commit -m 'Add screenshot image'
+        git push
+
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
