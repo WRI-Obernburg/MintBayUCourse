@@ -49,7 +49,7 @@ const fs = require('fs');
             const x = Math.min(secondBox.x, thirdBox.x) - 20;
             const y = Math.min(secondBox.y, thirdBox.y)  - 5;
             const width = Math.max(secondBox.x + secondBox.width, thirdBox.x + thirdBox.width) - x + 20;
-            const height = Math.max(secondBox.height, thirdBox.height) + 45;
+            const height = Math.max(secondBox.height, thirdBox.height) + 40;
 
             // Save the screenshot as image.png
             await page.screenshot({ path: 'image.png', clip: { x, y, width, height } });
