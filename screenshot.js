@@ -47,7 +47,7 @@ const fs = require('fs');
 
         if (secondBox && thirdBox) {
             const x = Math.min(secondBox.x, thirdBox.x) - 20;
-            const y = Math.min(secondBox.y, thirdBox.y) - Math.min(secondBox.height, thirdBox.height) / 2 - 5;
+            const y = Math.min(secondBox.y, thirdBox.y)  - 5;
             const width = Math.max(secondBox.x + secondBox.width, thirdBox.x + thirdBox.width) - x + 20;
             const height = Math.max(secondBox.height, thirdBox.height) + 45;
 
